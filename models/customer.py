@@ -12,7 +12,7 @@ class Customer:
 
     def __validate_id(self, id_number: str) -> str:
         id_number = id_number.strip()
-        if not re.match(r'^\d{7,8}$', id_number):
+        if not re.match(r"^\d{7,8}$", id_number):
             raise ValueError(f"Invalid Kenyan National ID: {id_number}")
         return id_number
 
@@ -20,7 +20,7 @@ class Customer:
         phone = phone.strip().replace(" ", "")
         if phone.startswith("07") or phone.startswith("01"):
             phone = "+254" + phone[1:]
-        if not re.match(r'^\+2547\d{8}$|^\+2541\d{8}$', phone):
+        if not re.match(r"^\+2547\d{8}$|^\+2541\d{8}$", phone):
             raise ValueError(f"Invalid Kenyan phone number: {phone}")
         return phone
 

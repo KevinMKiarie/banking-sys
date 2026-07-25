@@ -4,18 +4,18 @@ import uuid
 
 
 class TransactionType(Enum):
-    DEPOSIT    = "DEPOSIT"
+    DEPOSIT = "DEPOSIT"
     WITHDRAWAL = "WITHDRAWAL"
-    TRANSFER   = "TRANSFER"
-    MPESA_IN   = "MPESA_IN"
-    MPESA_OUT  = "MPESA_OUT"
+    TRANSFER = "TRANSFER"
+    MPESA_IN = "MPESA_IN"
+    MPESA_OUT = "MPESA_OUT"
 
 
 class TransactionStatus(Enum):
-    PENDING   = "PENDING"
+    PENDING = "PENDING"
     COMPLETED = "COMPLETED"
-    FAILED    = "FAILED"
-    REVERSED  = "REVERSED"
+    FAILED = "FAILED"
+    REVERSED = "REVERSED"
 
 
 class Transaction:
@@ -25,7 +25,7 @@ class Transaction:
         amount: float,
         account_number: str,
         description: str = "",
-        reference: str = None
+        reference: str = None,
     ):
         self.__id = str(uuid.uuid4())[:8].upper()
         self.__type = transaction_type

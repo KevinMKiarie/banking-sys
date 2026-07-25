@@ -9,32 +9,34 @@ class MPesaIntegration:
 
     # Standard Safaricom send-money tariff bands (amount range -> charge in KES)
     CHARGES = {
-        (1,     49):     0,
-        (50,    100):    0,
-        (101,   500):    7,
-        (501,   1000):   13,
-        (1001,  1500):   23,
-        (1501,  2500):   33,
-        (2501,  3500):   53,
-        (3501,  5000):   57,
-        (5001,  7500):   78,
-        (7501,  10000):  90,
-        (10001, 15000):  100,
-        (15001, 20000):  105,
-        (20001, 35000):  108,
-        (35001, 50000):  108,
+        (1, 49): 0,
+        (50, 100): 0,
+        (101, 500): 7,
+        (501, 1000): 13,
+        (1001, 1500): 23,
+        (1501, 2500): 33,
+        (2501, 3500): 53,
+        (3501, 5000): 57,
+        (5001, 7500): 78,
+        (7501, 10000): 90,
+        (10001, 15000): 100,
+        (15001, 20000): 105,
+        (20001, 35000): 108,
+        (35001, 50000): 108,
         (50001, 150000): 108,
     }
 
     def __init__(self):
-        self.__paybill_accounts: dict = {}   # paybill_number -> {account, name}
-        self.__till_numbers: dict     = {}   # till_number -> business_name
-        self.__transactions: list     = []
+        self.__paybill_accounts: dict = {}  # paybill_number -> {account, name}
+        self.__till_numbers: dict = {}  # till_number -> business_name
+        self.__transactions: list = []
 
-    def register_paybill(self, paybill_number: str, bank_account: str, business_name: str):
+    def register_paybill(
+        self, paybill_number: str, bank_account: str, business_name: str
+    ):
         self.__paybill_accounts[paybill_number] = {
             "account": bank_account,
-            "name": business_name
+            "name": business_name,
         }
         print(f"[M-Pesa] Paybill {paybill_number} registered for {business_name}")
 
@@ -50,20 +52,20 @@ class MPesaIntegration:
 
     def send_money(self, sender_phone: str, receiver_phone: str, amount: float) -> dict:
         """Person-to-person M-Pesa transfer."""
-        charge    = self.get_charge(amount)
-        total     = amount + charge
+        charge = self.get_charge(amount)
+        total = amount + charge
         timestamp = datetime.now()
-        ref       = f"MP{timestamp.strftime('%y%m%d%H%M%S')}"
+        ref = f"MP{timestamp.strftime('%y%m%d%H%M%S')}"
 
         result = {
-            "reference":      ref,
-            "sender":         sender_phone,
-            "receiver":       receiver_phone,
-            "amount":         amount,
-            "charge":         charge,
+            "reference": ref,
+            "sender": sender_phone,
+            "receiver": receiver_phone,
+            "amount": amount,
+            "charge": charge,
             "total_deducted": total,
-            "timestamp":      timestamp.isoformat(),
-            "status":         "SUCCESS",
+            "timestamp": timestamp.isoformat(),
+            "status": "SUCCESS",
         }
         self.__transactions.append(result)
         print(
@@ -72,26 +74,28 @@ class MPesaIntegration:
         )
         return result
 
-    def pay_bill(self, phone: str, paybill: str, account_ref: str, amount: float) -> dict:
+    def pay_bill(
+        self, phone: str, paybill: str, account_ref: str, amount: float
+    ) -> dict:
         """Pay a business via paybill number."""
         if paybill not in self.__paybill_accounts:
             raise LookupError(f"Paybill {paybill} not registered")
 
-        business  = self.__paybill_accounts[paybill]
-        charge    = self.get_charge(amount)
+        business = self.__paybill_accounts[paybill]
+        charge = self.get_charge(amount)
         timestamp = datetime.now()
-        ref       = f"PB{timestamp.strftime('%y%m%d%H%M%S')}"
+        ref = f"PB{timestamp.strftime('%y%m%d%H%M%S')}"
 
         result = {
-            "reference":  ref,
-            "phone":      phone,
-            "paybill":    paybill,
+            "reference": ref,
+            "phone": phone,
+            "paybill": paybill,
             "account_ref": account_ref,
-            "business":   business["name"],
-            "amount":     amount,
-            "charge":     charge,
-            "timestamp":  timestamp.isoformat(),
-            "status":     "SUCCESS",
+            "business": business["name"],
+            "amount": amount,
+            "charge": charge,
+            "timestamp": timestamp.isoformat(),
+            "status": "SUCCESS",
         }
         self.__transactions.append(result)
         print(
@@ -110,8 +114,11 @@ class MPesaIntegration:
 
     def get_transaction_history(self, phone: str) -> list:
         return [
-            t for t in self.__transactions
-            if t.get("sender") == phone or t.get("receiver") == phone or t.get("phone") == phone
+            t
+            for t in self.__transactions
+            if t.get("sender") == phone
+            or t.get("receiver") == phone
+            or t.get("phone") == phone
         ]
 
     def __repr__(self) -> str:

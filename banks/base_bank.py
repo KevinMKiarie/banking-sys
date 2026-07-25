@@ -16,8 +16,8 @@ class BaseBank(ABC):
         self._bank_name = bank_name
         self._bank_code = bank_code
         self._swift_code = swift_code
-        self._customers: dict = {}   # national_id -> Customer
-        self._accounts: dict  = {}   # account_number -> Account
+        self._customers: dict = {}  # national_id -> Customer
+        self._accounts: dict = {}  # account_number -> Account
 
     @property
     def bank_name(self) -> str:
@@ -32,19 +32,27 @@ class BaseBank(ABC):
     # ------------------------------------------------------------------
 
     @abstractmethod
-    def open_account(self, customer: Customer, account_type: AccountType, initial_deposit: float) -> Account:
+    def open_account(
+        self, customer: Customer, account_type: AccountType, initial_deposit: float
+    ) -> Account:
         pass
 
     @abstractmethod
-    def deposit(self, account_number: str, amount: float, description: str = "") -> Transaction:
+    def deposit(
+        self, account_number: str, amount: float, description: str = ""
+    ) -> Transaction:
         pass
 
     @abstractmethod
-    def withdraw(self, account_number: str, amount: float, description: str = "") -> Transaction:
+    def withdraw(
+        self, account_number: str, amount: float, description: str = ""
+    ) -> Transaction:
         pass
 
     @abstractmethod
-    def transfer(self, from_account: str, to_account: str, amount: float) -> Transaction:
+    def transfer(
+        self, from_account: str, to_account: str, amount: float
+    ) -> Transaction:
         pass
 
     @abstractmethod
@@ -63,14 +71,17 @@ class BaseBank(ABC):
 
     def _generate_account_number(self, prefix: str) -> str:
         import random
-        digits = ''.join([str(random.randint(0, 9)) for _ in range(8)])
+
+        digits = "".join([str(random.randint(0, 9)) for _ in range(8)])
         return f"{prefix}{digits}"
 
     def _validate_account(self, account_number: str) -> Account:
         """Reused by every subclass to guard operations before they run."""
         account = self._accounts.get(account_number)
         if not account:
-            raise LookupError(f"Account {account_number} not found at {self._bank_name}")
+            raise LookupError(
+                f"Account {account_number} not found at {self._bank_name}"
+            )
         if not account.is_active:
             raise PermissionError(f"Account {account_number} is inactive")
         return account

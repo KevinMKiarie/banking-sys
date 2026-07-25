@@ -11,7 +11,8 @@ class BankingSystem:
     This is the single entry point your application talks to.
     """
 
-    INTERBANK_FEE = 25.0  
+    INTERBANK_FEE = 25.0
+
     def __init__(self):
         self.__banks: Dict[str, BaseBank] = {}
         self.__mpesa = MPesaIntegration()
@@ -43,23 +44,27 @@ class BankingSystem:
         Transfer between two different banks via PesaLink simulation.
         Debits sender (amount + flat fee)
         """
-        sender_bank   = self.__banks.get(from_bank_code)
+        sender_bank = self.__banks.get(from_bank_code)
         receiver_bank = self.__banks.get(to_bank_code)
 
         if not sender_bank:
-            raise LookupError(f"Bank code '{from_bank_code}' is not registered in the system")
+            raise LookupError(
+                f"Bank code '{from_bank_code}' is not registered in the system"
+            )
         if not receiver_bank:
-            raise LookupError(f"Bank code '{to_bank_code}' is not registered in the system")
+            raise LookupError(
+                f"Bank code '{to_bank_code}' is not registered in the system"
+            )
 
         sender_bank.withdraw(
             from_account,
             amount + self.INTERBANK_FEE,
-            f"Interbank transfer to {to_bank_code}/{to_account} (PesaLink fee: KES {self.INTERBANK_FEE})"
+            f"Interbank transfer to {to_bank_code}/{to_account} (PesaLink fee: KES {self.INTERBANK_FEE})",
         )
         receiver_bank.deposit(
             to_account,
             amount,
-            f"Interbank transfer from {from_bank_code}/{from_account}"
+            f"Interbank transfer from {from_bank_code}/{from_account}",
         )
 
         print(

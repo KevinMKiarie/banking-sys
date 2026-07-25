@@ -6,17 +6,23 @@ from models.transaction import Transaction, TransactionType, TransactionStatus
 class AccountType(Enum):
     SAVINGS = "SAVINGS"
     CURRENT = "CURRENT"
-    FIXED   = "FIXED_DEPOSIT"
+    FIXED = "FIXED_DEPOSIT"
 
 
 class Account:
     MINIMUM_BALANCE = {
         AccountType.SAVINGS: 1000.0,
         AccountType.CURRENT: 5000.0,
-        AccountType.FIXED:   10000.0,
+        AccountType.FIXED: 10000.0,
     }
 
-    def __init__(self, account_number: str, owner_id: str, account_type: AccountType, opening_balance: float = 0.0):
+    def __init__(
+        self,
+        account_number: str,
+        owner_id: str,
+        account_type: AccountType,
+        opening_balance: float = 0.0,
+    ):
         self.__account_number = account_number
         self.__owner_id = owner_id
         self.__account_type = account_type
@@ -28,7 +34,9 @@ class Account:
             self._credit(opening_balance, "Opening balance")
 
     def _credit(self, amount: float, description: str) -> Transaction:
-        txn = Transaction(TransactionType.DEPOSIT, amount, self.__account_number, description)
+        txn = Transaction(
+            TransactionType.DEPOSIT, amount, self.__account_number, description
+        )
         self.__balance += amount
         self.__transactions.append(txn)
         txn.mark_completed()
@@ -41,7 +49,9 @@ class Account:
                 f"Insufficient funds. Balance after transaction would fall below "
                 f"minimum KES {min_bal:,.2f} for {self.__account_type.value} account."
             )
-        txn = Transaction(TransactionType.WITHDRAWAL, amount, self.__account_number, description)
+        txn = Transaction(
+            TransactionType.WITHDRAWAL, amount, self.__account_number, description
+        )
         self.__balance -= amount
         self.__transactions.append(txn)
         txn.mark_completed()
@@ -75,7 +85,9 @@ class Account:
         self.__is_active = False
 
     def get_mini_statement(self, last_n: int = 5) -> str:
-        lines = [f"Account: {self.__account_number} | Balance: KES {self.__balance:,.2f}"]
+        lines = [
+            f"Account: {self.__account_number} | Balance: KES {self.__balance:,.2f}"
+        ]
         for txn in self.__transactions[-last_n:]:
             lines.append(
                 f"  {txn.timestamp.strftime('%d/%m/%Y %H:%M')} | "
