@@ -1,6 +1,6 @@
+import uuid
 from datetime import datetime
 from enum import Enum
-import uuid
 
 
 class TransactionType(Enum):

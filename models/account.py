@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
-from models.transaction import Transaction, TransactionType, TransactionStatus
+
+from models.transaction import Transaction, TransactionStatus, TransactionType
 
 
 class AccountType(Enum):

@@ -1,6 +1,6 @@
 from banks.base_bank import BaseBank
-from models.customer import Customer
 from models.account import Account, AccountType
+from models.customer import Customer
 from models.transaction import Transaction
 
 

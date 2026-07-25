@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional
-from models.customer import Customer
+
 from models.account import Account, AccountType
+from models.customer import Customer
 from models.transaction import Transaction
 
 

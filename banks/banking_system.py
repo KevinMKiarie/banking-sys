@@ -1,8 +1,9 @@
 from typing import Dict, Optional
+
 from banks.base_bank import BaseBank
 from banks.mpesa import MPesaIntegration
-from models.customer import Customer
 from models.account import Account, AccountType
+from models.customer import Customer
 
 
 class BankingSystem:
